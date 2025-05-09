@@ -105,6 +105,15 @@ app.get('/api/contacts', async (req, res, next) => {
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
+// Endpoint do pobierania zgłoszeń (tylko dla admina)
+app.get('/api/admin/contacts', async (req, res, next) => {
+    try {
+        const contacts = await Contact.find().sort({ createdAt: -1 });
+        res.json(contacts);
+    } catch (err) {
+        next(err);
+    }
+});
 app.listen(PORT, () => {
     console.log(`Serwer działa na porcie ${PORT}`);
 });
