@@ -101,10 +101,6 @@ app.get('/api/contacts', async (req, res, next) => {
     }
 });
 
-// Użycie middleware do obsługi błędów
-app.use(errorHandler);
-
-const PORT = process.env.PORT || 3000;
 // Endpoint do pobierania zgłoszeń (tylko dla admina)
 app.get('/api/admin/contacts', async (req, res, next) => {
     try {
@@ -114,6 +110,43 @@ app.get('/api/admin/contacts', async (req, res, next) => {
         next(err);
     }
 });
+
+app.get('/api/admin/contact-count', async (req, res, next) => {
+    try {
+        const count = await Contact.countDocuments();
+        res.json({ count });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Schemat opinii
+const feedbackSchema = new mongoose.Schema({
+    name: String,
+    message: String,
+    createdAt: { type: Date, default: Date.now }
+});
+const Feedback = mongoose.model('Feedback', feedbackSchema);
+
+// Endpoint do przyjmowania opinii
+app.post('/api/feedback', async (req, res, next) => {
+    const { name, message } = req.body;
+    if (!name || !message) {
+        return res.status(400).json({ error: 'Wszystkie pola są wymagane.' });
+    }
+    try {
+        const feedback = new Feedback({ name, message });
+        await feedback.save();
+        res.status(201).json({ success: true });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Użycie middleware do obsługi błędów
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Serwer działa na porcie ${PORT}`);
 });
