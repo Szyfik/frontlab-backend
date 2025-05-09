@@ -4,7 +4,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: '*' // Umożliwia dostęp z dowolnej domeny
+}));
 app.use(express.json());
 
 // Middleware do obsługi błędów
@@ -142,13 +144,6 @@ app.post('/api/feedback', async (req, res, next) => {
         next(err);
     }
 });
-
-const cors = require('cors');
-
-// Umożliwienie CORS dla konkretnej domeny
-app.use(cors({
-    origin: 'https://szyfik.github.io/' // Zmień na swoją domenę
-}));
 
 // Użycie middleware do obsługi błędów
 app.use(errorHandler);
