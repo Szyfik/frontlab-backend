@@ -147,7 +147,7 @@ const cors = require('cors');
 
 // Umożliwienie CORS dla konkretnej domeny
 app.use(cors({
-    origin: 'https://szyfik.github.io/FrontLab/contact.html' // Zmień na swoją domenę
+    origin: 'https://szyfik.github.io/' // Zmień na swoją domenę
 }));
 
 // Użycie middleware do obsługi błędów
