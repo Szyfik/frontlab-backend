@@ -148,6 +148,15 @@ app.post('/api/feedback', async (req, res, next) => {
 // Użycie middleware do obsługi błędów
 app.use(errorHandler);
 
+app.get('/api/contact', async (req, res) => {
+    try {
+        const contacts = await Contact.find();
+        res.json(contacts);
+    } catch (err) {
+        res.status(500).json({ error: 'Wystąpił błąd serwera.' });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Serwer działa na porcie ${PORT}`);
